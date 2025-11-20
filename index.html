@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8 ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给特别的你</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+        
+        /* 手机端样式 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+            
+            .message {
+                font-size: 1.1em;
+                line-height: 1.5;
+                margin-bottom: 25px;
+            }
+            
+            .heart {
+                font-size: 2.5em;
+                margin: 15px 0;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 25px;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 250px;
+                padding: 15px 25px;
+                font-size: 1.2em;
+            }
+            
+            .no-btn.moving {
+                position: fixed !important;
+                max-width: 200px;
+            }
+        }
+        
+        /* 超小屏幕适配 */
+        @media (max-width: 380px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .message {
+                font-size: 1em;
+            }
+            
+            button {
+                font-size: 1.1em;
+                padding: 12px 20px;
+            }
+        }
+        
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        
+        .heart {
+            font-size: 3em;
+            color: #e91e63;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .yes-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .no-btn {
+            background: #f44336;
+            color: white;
+            position: relative;
+            transition: all 0.1s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .yes-btn:hover {
+            background: #45a049;
+        }
+        
+        .no-btn:hover {
+            background: #da190b;
+        }
+        
+        .no-btn.moving {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            color: #e91e63;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* 手机端漂浮爱心优化 */
+        @media (max-width: 600px) {
+            .floating-heart {
+                font-size: 16px;
+                animation-duration: 5s;
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-message {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 手机端成功消息样式 */
+        @media (max-width: 600px) {
+            .success-message {
+                padding: 30px 20px;
+                border-radius: 15px;
+            }
+        }
+        
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    <div class="fireworks" id="fireworks"></div>
+    
+    <div class="container" id="mainContent">
+        <div class="heart">❤️</div>
+        <h1>给特别的你</h1>
+        <div class="message">
+            <p>从遇见你的那一刻起，我的世界变得不一样了。</p>
+            <p>你的笑容像阳光一样温暖，你的声音如音乐般动听。</p>
+            <p>我想和你一起看遍世间风景，分享生活的点点滴滴。</p>
+            <p>你愿意给我一个机会，让我成为你生命中的那个人吗？</p>
+        </div>
+        <div class="heart">💕</div>
+        
+        <div class="buttons">
+            <button class="yes-btn" onclick="handleYes()">我愿意！</button>
+            <button class="no-btn" id="noBtn" onmouseover="moveNoButton()">再考虑一下</button>
+        </div>
+    </div>
+    
+    <div class="container hidden" id="successMessage">
+        <div class="success-message">
+            <div class="heart">🎉</div>
+            <h1>太棒了！</h1>
+            <div class="message">
+                <p>这真是我收到过最好的消息！</p>
+                <p>我会用一生的时间来珍惜这份感情，</p>
+                <p>让我们的故事成为最美丽的篇章！</p>
+            </div>
+            <div class="heart">💖</div>
+            <button onclick="resetPage()" style="background: #2196F3; color: white;">再看一遍</button>
+        </div>
+    </div>
+
+    <script>
+        // 创建漂浮的爱心
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const hearts = ['❤️', '💕', '💖', '💗', '💓', '💘'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                    container.appendChild(heart);
+                    
+                    // 移除爱心以保持性能
+                    setTimeout(() => {
+                        if (heart.parentNode) {
+                            heart.parentNode.removeChild(heart);
+                        }
+                    }, 7000);
+                }, i * 300);
+            }
+        }
+        
+        // 持续创建漂浮爱心
+        setInterval(createFloatingHearts, 5000);
+        createFloatingHearts(); // 初始创建
+        
+        // 处理"我愿意"按钮点击
+        function handleYes() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('successMessage').classList.remove('hidden');
+            createFireworks();
+        }
+        
+        // 处理"再考虑一下"按钮移动
+        let moveCount = 0;
+        function moveNoButton() {
+            const button = document.getElementById('noBtn');
+            moveCount++;
+            
+            // 前两次快速移动，第三次显示甜蜜消息
+            if (moveCount < 3) {
+                const x = Math.max(20, Math.min(window.innerWidth - 200, Math.random() * (window.innerWidth - 200));
+                const y = Math.max(20, Math.min(window.innerHeight - 100, Math.random() * (window.innerHeight - 100));
+                
+                // 添加摇晃动画
+                button.classList.add('moving');
+                setTimeout(() => {
+                    button.classList.remove('moving');
+                }, 500);
+                
+                // 手机端特殊处理
+                if (window.innerWidth <= 600) {
+                    // 手机上只显示提示，不移动按钮
+                    showMobileToast();
+                    return;
+                }
+                
+                // 桌面端移动位置
+                button.style.position = 'fixed';
+                button.style.left = x + 'px';
+                button.style.top = y + 'px';
+                button.style.zIndex = '1000';
+                
+                // 改变按钮文字
+                const messages = ['再想想吧~', '真的不要吗？', '点绿色的那个嘛'];
+                if (moveCount <= messages.length) {
+                    button.textContent = messages[moveCount - 1];
+                }
+            } else {
+                // 第三次点击显示甜蜜消息
+                showSweetMessage();
+            }
+        }
+        
+        // 手机端提示
+        function showMobileToast() {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                font-size: 16px;
+                z-index: 2000;
+                animation: fadeInOut 2s ease-in-out;
+            `;
+            toast.textContent = '点绿色的按钮嘛~ 💕';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+        
+        // 添加淡入淡出动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示甜蜜消息
+        function showSweetMessage() {
+            const button = document.getElementById('noBtn');
+            button.textContent = '我就知道你愿意~';
+            button.style.background = '#4CAF50';
+            button.onclick = handleYes;
+            button.onmouseover = null;
+            
+            // 显示额外的爱心
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = '💕';
+                    heart.style.position = 'fixed';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = Math.random() * 100 + 'vh';
+                    heart.style.fontSize = '30px';
+                    heart.style.zIndex = '1001';
+                    heart.style.animation = 'float 3s ease-out forwards';
+                    heart.style.pointerEvents = 'none';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        }
+        
+        // 创建庆祝效果
+        function createFireworks() {
+            const container = document.getElementById('fireworks');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.style.position = 'absolute';
+                    firework.style.width = '4px';
+                    firework.style.height = '4px';
+                    firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    firework.style.borderRadius = '50%';
+                    firework.style.left = Math.random() * 100 + 'vw';
+                    firework.style.top = Math.random() * 100 + 'vh';
+                    firework.style.boxShadow = '0 0 10px 2px ' + colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(firework);
+                    
+                    // 烟花爆炸效果
+                    setTimeout(() => {
+                        firework.style.transform = 'scale(3)';
+                        firework.style.opacity = '0';
+                        firework.style.transition = 'all 0.5s ease';
+                    }, 100);
+                    
+                    // 移除烟花
+                    setTimeout(() => {
+                        if (firework.parentNode) {
+                            firework.parentNode.removeChild(firework);
+                        }
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+        
+        // 重置页面
+        function resetPage() {
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+            
+            // 重置"再考虑一下"按钮位置和属性
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.position = '';
+            noBtn.style.left = '';
+            noBtn.style.top = '';
+            noBtn.style.zIndex = '';
+            noBtn.style.background = '';
+            noBtn.textContent = '再考虑一下';
+            noBtn.onclick = null;
+            noBtn.onmouseover = moveNoButton;
+            
+            // 重置计数器
+            moveCount = 0;
+            
+            // 清除所有额外爱心
+            const extraHearts = document.querySelectorAll('div[style*="fixed"]');
+            extraHearts.forEach(heart => {
+                if (heart.textContent === '💕' && heart.style.zIndex === '1001') {
+                    heart.remove();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
