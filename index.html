@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表白</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .message {
+            color: white;
+            font-size: 1.2em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .heart {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .yes-btn:hover, .no-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 600px) {
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContent">
+        <h1>💕 致我心中的你 💕</h1>
+        <div class="message">
+            <p>从遇见你的那一刻起，我的世界变得不一样了。</p>
+            <p>你的笑容像阳光一样温暖，你的声音如音乐般动听。</p>
+            <p>我想和你一起看遍世间风景，分享生活的点点滴滴。</p>
+            <p>你愿意给我一个机会，让我成为你生命中的那个人吗？</p>
+        </div>
+        <div class="heart">💕</div>
+        
+        <div class="buttons">
+            <button class="yes-btn" onclick="handleYes()">我愿意！</button>
+            <button class="no-btn" id="noBtn" onclick="moveNoButton()" onmouseover="moveNoButton()">再考虑一下</button>
+        </div>
+    </div>
+    
+    <div class="container hidden" id="successMessage">
+        <h1>🎉 太棒了！🎉</h1>
+        <div class="message">
+            <p>我就知道你会答应的！</p>
+            <p>从今天起，让我们一起创造美好的回忆吧！</p>
+        </div>
+        <div class="heart">💕</div>
+        <button class="yes-btn" onclick="resetPage()">再看一遍</button>
+    </div>
+
+    <script>
+        var moveCount = 0;
+
+        function handleYes() {
+            console.log("点击了'我愿意'按钮");
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            createFireworks();
+        }
+
+        function moveNoButton() {
+            console.log("点击了'再考虑一下'按钮，次数：" + moveCount);
+            var button = document.getElementById('noBtn');
+            if (!button) return;
+            
+            moveCount++;
+            
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+            var buttonWidth = 200;
+            var buttonHeight = 50;
+            var padding = 20;
+            
+            var maxX = windowWidth - buttonWidth - padding;
+            var maxY = windowHeight - buttonHeight - padding;
+            
+            var randomX = Math.random() * maxX;
+            var randomY = Math.random() * maxY;
+            
+            var x = Math.max(padding, randomX);
+            var y = Math.max(padding, randomY);
+            
+            button.style.position = 'fixed';
+            button.style.left = x + 'px';
+            button.style.top = y + 'px';
+            button.style.zIndex = '1000';
+            button.style.transition = 'all 0.3s ease';
+            
+            if (moveCount >= 3) {
+                button.textContent = '我知道你愿意~ 💕';
+                button.style.background = 'linear-gradient(135deg, #ff69b4, #ff1493)';
+                
+                setTimeout(function() {
+                    handleYes();
+                }, 1500);
+            } else {
+                var messages = ['再想想吧~', '真的不要吗？', '点绿色的那个嘛'];
+                button.textContent = messages[moveCount - 1];
+            }
+        }
+
+        function resetPage() {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            
+            var noBtn = document.getElementById('noBtn');
+            if (noBtn) {
+                noBtn.style.position = '';
+                noBtn.style.left = '';
+                noBtn.style.top = '';
+                noBtn.style.zIndex = '';
+                noBtn.style.background = '';
+                noBtn.style.transition = '';
+                noBtn.textContent = '再考虑一下';
+                moveCount = 0;
+            }
+        }
+
+        function createFireworks() {
+            for (var i = 0; i < 20; i++) {
+                setTimeout(function(i) {
+                    var firework = document.createElement('div');
+                    var colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
+                    var color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    firework.style.cssText = 'position:fixed;width:8px;height:8px;background:' + color + ';border-radius:50%;left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;pointer-events:none;';
+                    
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(function() {
+                        if (firework.parentNode) {
+                            firework.parentNode.removeChild(firework);
+                        }
+                    }, 2000);
+                }, i * 100, i);
+            }
+        }
+
+        console.log("页面加载完成");
+    </script>
+</body>
+</html>

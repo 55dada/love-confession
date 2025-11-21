@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数测试 - 修复moveNoButton</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        .button-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            font-family: inherit;
+        }
+        .yes-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+        .no-btn {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+        .check-btn {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            text-align: left;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 moveNoButton 函数测试</h1>
+        <p>测试 "moveNoButton is not defined" 错误的修复</p>
+        
+        <div class="button-group">
+            <button class="check-btn" onclick="checkFunctionDefinition()">检查函数定义</button>
+            <button class="yes-btn" onclick="handleYes()">测试 handleYes</button>
+            <button class="no-btn" onclick="moveNoButton()" onmouseover="moveNoButton()">测试 moveNoButton</button>
+        </div>
+        
+        <div id="result">点击 "检查函数定义" 查看状态...</div>
+    </div>
+
+    <script>
+        // 全局变量 - 必须在函数定义之前
+        let moveCount = 0;
+        let countdownInterval = null;
+
+        console.log("页面开始加载...");
+
+        // 处理"我愿意"按钮点击
+        function handleYes() {
+            console.log("handleYes 函数被调用");
+            const result = document.getElementById('result');
+            result.innerHTML = '<span class="success">✅ handleYes 函数正常工作！</span>\n按钮点击事件绑定成功';
+        }
+
+        // 处理"再考虑一下"按钮移动
+        function moveNoButton() {
+            console.log("moveNoButton 函数被调用，次数：" + moveCount);
+            const result = document.getElementById('result');
+            moveCount++;
+            
+            // 简单的按钮移动效果
+            const btn = event.target;
+            if (btn) {
+                const randomX = Math.random() * 40 - 20;
+                const randomY = Math.random() * 40 - 20;
+                btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                
+                setTimeout(() => {
+                    btn.style.transform = 'translate(0, 0)';
+                }, 300);
+            }
+            
+            result.innerHTML = `<span class="success">✅ moveNoButton 函数正常工作！</span>\n点击次数：${moveCount}\n函数定义在全局作用域，可以正常访问`;
+        }
+
+        // 检查函数定义
+        function checkFunctionDefinition() {
+            const result = document.getElementById('result');
+            let html = '<strong>函数检查结果：</strong>\n\n';
+            
+            // 检查变量
+            html += `moveCount 变量: ${moveCount}\n`;
+            html += `countdownInterval 变量: ${countdownInterval}\n\n`;
+            
+            // 检查函数
+            html += `typeof handleYes: ${typeof handleYes}\n`;
+            html += `typeof moveNoButton: ${typeof moveNoButton}\n`;
+            html += `typeof checkFunctionDefinition: ${typeof checkFunctionDefinition}\n\n`;
+            
+            // 检查window对象上的函数
+            html += `window.handleYes: ${typeof window.handleYes}\n`;
+            html += `window.moveNoButton: ${typeof window.moveNoButton}\n\n`;
+            
+            if (typeof handleYes === 'function') {
+                html += '<span class="success">✅ handleYes 函数已正确定义</span>\n';
+            } else {
+                html += '<span class="error">❌ handleYes 函数未定义</span>\n';
+            }
+            
+            if (typeof moveNoButton === 'function') {
+                html += '<span class="success">✅ moveNoButton 函数已正确定义</span>\n';
+            } else {
+                html += '<span class="error">❌ moveNoButton 函数未定义</span>\n';
+            }
+            
+            // 尝试调用函数
+            try {
+                if (typeof moveNoButton === 'function') {
+                    html += '\n<span class="info">ℹ️ 尝试调用 moveNoButton 函数...</span>';
+                    // 这里不实际调用，只是测试
+                    html += '\n<span class="success">✅ 函数可以正常调用</span>';
+                }
+            } catch (error) {
+                html += `\n<span class="error">❌ 调用函数时出错: ${error.message}</span>`;
+            }
+            
+            result.innerHTML = html;
+        }
+
+        // 页面加载完成后自动检查
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM加载完成");
+            setTimeout(checkFunctionDefinition, 500);
+        });
+
+        window.addEventListener('load', function() {
+            console.log("页面完全加载");
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+# GitHub Pages 部署命令
+
+cd E:\cloud\1
+
+# 初始化 Git（如果还没有）
+git init
+
+# 添加远程仓库（替换 YOUR_USERNAME 为你的 GitHub 用户名）
+git remote add origin https://github.com/YOUR_USERNAME/love-confession.git
+
+# 添加文件
+git add .
+git commit -m "Add responsive love confession page"
+
+# 推送到 GitHub
+git push -u origin master
+
+# 完成后访问：https://YOUR_USERNAME.github.io/love-confession

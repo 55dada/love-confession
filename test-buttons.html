@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .yes-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .no-btn {
+            background: #f44336;
+            color: white;
+        }
+        .yes-btn:hover {
+            background: #45a049;
+        }
+        .no-btn:hover {
+            background: #da190b;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 按钮测试页面</h1>
+        <p>请点击下面的按钮测试功能：</p>
+        
+        <div class="buttons">
+            <button class="yes-btn" onclick="testYes()">测试愿意</button>
+            <button class="no-btn" onclick="testNo()">测试不愿意</button>
+        </div>
+        
+        <div id="message" class="message" style="display: none;"></div>
+    </div>
+
+    <script>
+        console.log("测试页面加载完成");
+
+        // 测试愿意按钮
+        function testYes() {
+            console.log("点击了愿意按钮");
+            const message = document.getElementById('message');
+            message.innerHTML = "✅ 愿意按钮工作正常！<br>handleYes 函数应该会被调用";
+            message.style.display = 'block';
+            message.style.background = '#d4edda';
+            message.style.color = '#155724';
+        }
+
+        // 测试不愿意按钮
+        function testNo() {
+            console.log("点击了不愿意按钮");
+            const message = document.getElementById('message');
+            message.innerHTML = "✅ 不愿意按钮工作正常！<br>moveNoButton 函数应该会被调用";
+            message.style.display = 'block';
+            message.style.background = '#f8d7da';
+            message.style.color = '#721c24';
+            
+            // 模拟按钮移动
+            event.target.style.position = 'relative';
+            event.target.style.transform = 'translate(' + (Math.random() * 40 - 20) + 'px, ' + (Math.random() * 40 - 20) + 'px)';
+        }
+
+        // 页面加载完成后的检查
+        window.onload = function() {
+            console.log("页面加载完成");
+            console.log("testYes 函数存在:", typeof testYes === 'function');
+            console.log("testNo 函数存在:", typeof testNo === 'function');
+            
+            // 检查按钮元素
+            const yesBtn = document.querySelector('.yes-btn');
+            const noBtn = document.querySelector('.no-btn');
+            
+            console.log("愿意按钮找到:", yesBtn !== null);
+            console.log("不愿意按钮找到:", noBtn !== null);
+        };
+    </script>
+</body>
+</html>

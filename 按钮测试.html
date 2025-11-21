@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            margin: 10px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .yes-btn { background: #4CAF50; color: white; }
+        .no-btn { background: #f44336; color: white; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h2>🔧 按钮功能测试</h2>
+        <p>请点击下面的按钮测试是否正常工作：</p>
+        
+        <button class="yes-btn" id="yesBtn">测试愿意按钮</button>
+        <button class="no-btn" id="noBtn">测试不愿意按钮</button>
+        
+        <div id="result" class="result">
+            等待点击按钮...
+        </div>
+    </div>
+
+    <script>
+        console.log("测试页面加载完成");
+
+        function testYes() {
+            console.log("✅ 愿意按钮测试成功！");
+            document.getElementById('result').innerHTML = 
+                '<div style="color: green;">✅ 愿意按钮工作正常！<br>handleYes 函数会被调用</div>';
+        }
+
+        function testNo() {
+            console.log("✅ 不愿意按钮测试成功！");
+            document.getElementById('result').innerHTML = 
+                '<div style="color: orange;">✅ 不愿意按钮工作正常！<br>moveNoButton 函数会被调用</div>';
+        }
+
+        // 多种方式绑定事件
+        window.onload = function() {
+            console.log("开始绑定测试事件...");
+
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
+            if (yesBtn) {
+                yesBtn.addEventListener('click', testYes);
+                yesBtn.onclick = testYes; // 备用方案
+                console.log("愿意按钮绑定成功");
+            }
+
+            if (noBtn) {
+                noBtn.addEventListener('click', testNo);
+                noBtn.onclick = testNo; // 备用方案
+                console.log("不愿意按钮绑定成功");
+            }
+
+            console.log("测试事件绑定完成！");
+        };
+
+        // 备用绑定
+        setTimeout(function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            
+            if (yesBtn && !yesBtn.onclick) {
+                yesBtn.onclick = testYes;
+                console.log("愿意按钮备用绑定");
+            }
+            
+            if (noBtn && !noBtn.onclick) {
+                noBtn.onclick = testNo;
+                console.log("不愿意按钮备用绑定");
+            }
+        }, 500);
+    </script>
+</body>
+</html>

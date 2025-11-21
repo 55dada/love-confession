@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试按钮</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .yes-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .no-btn {
+            background: #f44336;
+            color: white;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>按钮测试</h1>
+        <button class="yes-btn" onclick="handleYes()">我愿意！</button>
+        <button class="no-btn" onclick="handleNo()">再考虑一下</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function handleYes() {
+            document.getElementById('result').innerHTML = '你点击了"我愿意"！按钮响应正常！';
+            document.getElementById('result').style.color = 'green';
+        }
+
+        function handleNo() {
+            document.getElementById('result').innerHTML = '你点击了"再考虑一下"！按钮响应正常！';
+            document.getElementById('result').style.color = 'red';
+        }
+
+        // 页面加载完成后的测试
+        window.onload = function() {
+            document.getElementById('result').innerHTML = '页面加载完成，请点击按钮测试';
+            document.getElementById('result').style.color = 'blue';
+        };
+    </script>
+</body>
+</html>
