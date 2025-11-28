@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>表白</title>
     <style>
-        body { 
-            font-family: 'Microsoft YaHei', sans-serif; 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0;
             padding: 20px;
         }
-        .container { 
-            text-align: center; 
-            background: rgba(255,255,255,0.1); 
-            padding: 40px; 
-            border-radius: 20px; 
+        .container {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
             max-width: 600px;
             width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        h1 { 
-            color: white; 
-            font-size: 2.5em; 
-            margin-bottom: 20px; 
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         .message {
@@ -38,27 +40,42 @@
         .heart {
             font-size: 4em;
             margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
         }
-        button { 
-            padding: 15px 30px; 
-            margin: 10px; 
-            border: none; 
-            border-radius: 25px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-        .yes { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; }
-        .no { background: linear-gradient(135deg, #f44336, #da190b); color: white; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); }
-        .hidden { display: none !important; }
         .buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .yes-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+        .no-btn {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .hidden {
+            display: none !important;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         @media (max-width: 600px) {
             .buttons { flex-direction: column; gap: 15px; }
@@ -67,7 +84,7 @@
     </style>
 </head>
 <body>
-    <div id="main" class="container">
+    <div class="container" id="mainContent">
         <h1>💕 致我心中的你 💕</h1>
         <div class="message">
             <p>从遇见你的那一刻起，我的世界变得不一样了。</p>
@@ -78,89 +95,66 @@
         <div class="heart">💕</div>
         
         <div class="buttons">
-            <button class="yes" onclick="showSuccess()">我愿意！</button>
-            <button class="no" id="noBtn" onclick="moveNo()" onmouseover="moveNo()">再考虑一下</button>
+            <button class="yes-btn" onclick="showSuccess()">我愿意！</button>
+            <button class="no-btn" id="noBtn" onclick="moveNoButton()" onmouseover="moveNoButton()">再考虑一下</button>
         </div>
     </div>
     
-    <div id="success" class="container hidden">
+    <div class="container hidden" id="successMessage">
         <h1>🎉 太棒了！🎉</h1>
         <div class="message">
             <p>我就知道你会答应的！</p>
             <p>从今天起，让我们一起创造美好的回忆吧！</p>
         </div>
         <div class="heart">💕</div>
-        <button class="yes" onclick="reset()">再看一遍</button>
+        <button class="yes-btn" onclick="showMain()">再看一遍</button>
     </div>
 
     <script>
         var count = 0;
 
         function showSuccess() {
-            console.log('点击了我愿意按钮');
-            document.getElementById('main').style.display = 'none';
-            document.getElementById('success').style.display = 'block';
-            createFireworks();
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            makeFireworks();
         }
 
-        function moveNo() {
-            console.log('点击了再考虑按钮，次数：' + count);
+        function showMain() {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            resetButton();
+        }
+
+        function moveNoButton() {
             var btn = document.getElementById('noBtn');
             if (!btn) return;
             
             count++;
             
-            // 计算随机位置
-            var windowWidth = window.innerWidth || document.documentElement.clientWidth;
-            var windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            var btnWidth = 200;
-            var btnHeight = 50;
-            var padding = 20;
+            var x = Math.random() * 200 + 50;
+            var y = Math.random() * 100 + 50;
             
-            var maxX = windowWidth - btnWidth - padding;
-            var maxY = windowHeight - btnHeight - padding;
-            
-            var randomX = Math.random() * maxX;
-            var randomY = Math.random() * maxY;
-            
-            var x = Math.max(padding, randomX);
-            var y = Math.max(padding, randomY);
-            
-            // 移动按钮
-            btn.style.position = 'fixed';
+            btn.style.position = 'relative';
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
-            btn.style.zIndex = '1000';
-            btn.style.transition = 'all 0.3s ease';
+            btn.style.transition = 'all 0.5s ease';
             
-            // 改变按钮文字
             if (count >= 3) {
                 btn.textContent = '我知道你愿意~ 💕';
                 btn.style.background = 'linear-gradient(135deg, #ff69b4, #ff1493)';
-                
-                // 3次后自动跳转到成功页面
-                setTimeout(function() {
-                    showSuccess();
-                }, 1500);
+                setTimeout(showSuccess, 2000);
             } else {
-                var messages = ['再想想吧~', '真的不要吗？', '点绿色的那个嘛'];
-                var messageIndex = Math.min(count - 1, messages.length - 1);
-                btn.textContent = messages[messageIndex];
+                var msgs = ['再想想吧~', '真的不要吗？', '点绿色的那个嘛'];
+                btn.textContent = msgs[count - 1];
             }
         }
 
-        function reset() {
-            console.log('重置页面');
-            document.getElementById('success').style.display = 'none';
-            document.getElementById('main').style.display = 'block';
-            
-            // 重置按钮状态
+        function resetButton() {
             var btn = document.getElementById('noBtn');
             if (btn) {
                 btn.style.position = '';
                 btn.style.left = '';
                 btn.style.top = '';
-                btn.style.zIndex = '';
                 btn.style.background = '';
                 btn.style.transition = '';
                 btn.textContent = '再考虑一下';
@@ -168,50 +162,31 @@
             }
         }
 
-        function createFireworks() {
-            console.log('创建烟花效果');
-            var colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#f9ca24', '#f0932b'];
-            
-            for (var i = 0; i < 25; i++) {
-                (function(i) {
-                    setTimeout(function() {
-                        var firework = document.createElement('div');
-                        var color = colors[Math.floor(Math.random() * colors.length)];
-                        var size = Math.random() * 6 + 4;
-                        var duration = Math.random() * 2 + 1;
-                        
-                        firework.style.cssText = 
-                            'position:fixed;' +
-                            'width:' + size + 'px;' +
-                            'height:' + size + 'px;' +
-                            'background:' + color + ';' +
-                            'border-radius:50%;' +
-                            'left:' + Math.random() * 100 + '%;' +
-                            'top:' + Math.random() * 100 + '%;' +
-                            'pointer-events:none;' +
-                            'z-index:9999;';
-                        
-                        document.body.appendChild(firework);
-                        
-                        // 简单的消失动画
-                        setTimeout(function() {
-                            if (firework && firework.parentNode) {
-                                firework.style.opacity = '0';
-                                firework.style.transform = 'scale(2)';
-                                setTimeout(function() {
-                                    if (firework.parentNode) {
-                                        firework.parentNode.removeChild(firework);
-                                    }
-                                }, 500);
-                            }
-                        }, duration * 1000);
-                    }, i * 100);
-                })(i);
+        function makeFireworks() {
+            for (var i = 0; i < 10; i++) {
+                setTimeout(createFirework, i * 200);
             }
         }
 
-        // 页面加载完成后的初始化
-        console.log('页面加载完成，所有函数已定义');
+        function createFirework() {
+            var colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7'];
+            var firework = document.createElement('div');
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            var x = Math.random() * window.innerWidth;
+            var y = Math.random() * window.innerHeight;
+            
+            firework.style.cssText = 'position:fixed;width:6px;height:6px;background:' + color + ';border-radius:50%;left:' + x + 'px;top:' + y + 'px;pointer-events:none;';
+            
+            document.body.appendChild(firework);
+            
+            setTimeout(function() {
+                if (firework.parentNode) {
+                    firework.parentNode.removeChild(firework);
+                }
+            }, 1500);
+        }
+
+        console.log('页面加载完成');
     </script>
 </body>
 </html>
